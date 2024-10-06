@@ -1,37 +1,44 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
+import React from 'react'
+import { Tabs } from 'expo-router'
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+export default function Tablayout() {
+    return (
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+        <Tabs screenOptions={{
+            headerShown: false,
+            tabBarActiveTintColor: Colors.primaryColor
+        }}>
+            <Tabs.Screen options={{
+                tabBarLabel: "Home",
+                tabBarIcon: ({ color }) =>
+                    <AntDesign name="home" size={24} color={color} />
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
+            }} name="home"></Tabs.Screen>
+            <Tabs.Screen options={{
+                tabBarLabel: "Explore",
+                tabBarIcon: ({ color }) =>
+                    <Feather name="more-horizontal" size={24} color={color} />
+
+            }} name="explore"
+
+            ></Tabs.Screen>
+            <Tabs.Screen options={{
+                tabBarLabel: "Profile",
+                tabBarIcon: ({ color }) =>
+                    <FontAwesome name="user-circle-o" size={24} color={color} />
+            }} name="profile"></Tabs.Screen>
+
+            <Tabs.Screen options={{
+                tabBarLabel: "Logout",
+                tabBarIcon: ({ color }) =>
+                    <AntDesign name="logout" size={24} color={color} />
+            }} name='logout'></Tabs.Screen>
+
+        </Tabs>
+
+    )
 }
