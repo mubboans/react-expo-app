@@ -18,10 +18,10 @@ export default function Index() {
         flex: 1
       }}
     >
-      {
+      {/* {
         user ? <Redirect href={'/home'} /> : <Redirect href={'/login'} />
-      }
-
+      } */}
+      <Redirect href={'/login'} />
     </View>
   )
 }
