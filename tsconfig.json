@@ -15,6 +15,6 @@
     "expo-env.d.ts",
     "components/LoginScreen.jsx",
     "app/_layout.jsx",
-    "hooks/useWarmUpBrowser.jsx"
+    "hooks/axios_interceptor.jsx"
   ]
 }

@@ -1,58 +1,55 @@
-import { View, Text, Image, TouchableOpacity, TextInput, StyleSheet, Alert, Dimensions } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, StyleSheet, Dimensions } from 'react-native';
 import React, { useState } from 'react';
-import logImage from "../assets/images/log_nav.png";
-import { useWarmUpBrowser } from "../hooks/useWarmUpBrowser";
-import * as WebBrowser from "expo-web-browser";
 import { Colors } from '@/constants/Colors';
-import { useOAuth } from '@clerk/clerk-expo';
-import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
-
-WebBrowser.maybeCompleteAuthSession();
+import { AntDesign, Feather } from '@expo/vector-icons';
+import LottieView from 'lottie-react-native'; // Import Lottie
 
 const { width } = Dimensions.get('window');
 
 export default function LoginScreen() {
   const router = useRouter();
-  useWarmUpBrowser();
-  const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' });
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const onPressLogin = React.useCallback(async () => {
     console.log('Login Pressed');
 
     try {
-      const { createdSessionId } = await startOAuthFlow({
-        redirectUrl: Linking.createURL('/home', { scheme: 'apnschool' }),
-      });
-      console.log(createdSessionId, 'createdSessionId');
-
-      if (createdSessionId) {
-        // Handle successful login
-        // router.push('/home');
-      } else {
-        // Handle failed login
-      }
+      console.log('Login Hit');
     } catch (err) {
       console.log('OAuth error', err);
     }
   }, []);
 
   const handleForgotPassword = () => {
-    Alert.alert('Forgot Password', 'Forgot Password functionality not implemented.');
+    router.navigate('/forgot-password');
   };
 
   const handleRegister = () => {
-    Alert.alert('Register', 'Register functionality not implemented.');
+    router.navigate('/register');
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
   return (
     <View style={styles.container}>
+      {/* Lottie Animation */}
+      <View style={styles.lottieContainer}>
+        <LottieView
+          source={require('../assets/lottie/lott_login.json')} // Lottie animation file path
+          autoPlay
+          loop
+          style={{ flex: 1 }} // Styling the Lottie animation
+        />
+      </View>
+
       <View style={styles.logoContainer}>
-        <Image source={logImage} style={styles.logo} />
+        {/* <Image source={require('../assets/images/log_nav.png')} style={styles.logo} /> */}
         <Text style={styles.sessionExpiredText}>It Seems Your Session Expired..!</Text>
       </View>
 
@@ -65,23 +62,26 @@ export default function LoginScreen() {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!isPasswordVisible}
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+            <Feather name={isPasswordVisible ? 'eye' : 'eye-off'} size={24} color="gray" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <TouchableOpacity onPress={onPressLogin} style={styles.loginButton}>
-        <AntDesign name="google" size={24} color="white" style={styles.icon} />
+        <AntDesign name="login" size={24} color="white" style={styles.icon} />
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
-      <Text style={styles.subText}>
-        Your Ultimate App for all problems
-      </Text>
+      <Text style={styles.subText}>Your Ultimate App for all problems</Text>
 
       <View style={styles.footer}>
         <TouchableOpacity onPress={handleForgotPassword}>
@@ -97,29 +97,36 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginTop: '10px',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#fff',
+  },
+  lottieContainer: {
+    height: 300,
+    aspectRatio: 1
+  },
+  lottieAnimation: {
+    flex: 1
   },
   logoContainer: {
     marginBottom: 20,
     alignItems: 'center',
   },
   logo: {
-    width: width * 0.6,  // Adjusted for responsiveness
-    height: width * 0.45, // Adjusted for responsiveness
+    width: width * 0.6,
+    height: width * 0.45,
     borderRadius: 20,
   },
   sessionExpiredText: {
     fontFamily: 'outfit-medium',
-    fontSize: 20,  // Reduced font size for better scaling
+    fontSize: 20,
     textAlign: 'center',
     marginVertical: 10,
   },
   inputContainer: {
-    width: '90%',  // Use percentage for responsiveness
+    width: '100%',
     marginBottom: 20,
   },
   input: {
@@ -129,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    width: '100%',  // Ensure inputs are responsive
+    width: '100%',
   },
   loginButton: {
     backgroundColor: Colors.primaryColor,
@@ -158,11 +165,21 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '90%',  // Responsive width
+    width: '90%',
   },
   linkText: {
     color: Colors.primaryColor,
     fontFamily: 'outfit-medium',
     textDecorationLine: 'underline',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 15,
   },
 });

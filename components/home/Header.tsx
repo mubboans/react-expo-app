@@ -1,12 +1,15 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react'
-import { useUser } from '@clerk/clerk-expo';
+// import { useUser } from '@clerk/clerk-expo';
 
 
 const Header = () => {
-    const { user } = useUser();
-    console.log(user, 'check user');
-
+    // const { user } = useUser();
+    // console.log(user, 'check user');
+    const user = {
+        fullName: "Mubashir Ansari",
+        imageUrl: 'https://ucarecdn.com/e66e6e10-6880-4325-b54c-a768f32e8045/profile.png'
+    }
     return (
         <View style={{
             display: 'flex',

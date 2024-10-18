@@ -8,10 +8,10 @@ export default function Slider() {
 
         async function getAllDocs() {
             try {
-                const Snapshot = await getDocs(collection(db, '1'))
-                Snapshot.forEach((doc) => {
-                    console.log(doc, 'check doc')
-                })
+                // const Snapshot = await getDocs(collection(db, '1'))
+                // Snapshot.forEach((doc) => {
+                //     console.log(doc, 'check doc')
+                // })
             } catch (error) {
 
             }
